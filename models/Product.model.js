@@ -29,16 +29,6 @@ const productSchema = mongoose.Schema({
         type: Number,
         required: [true, "Please Provide Product Quantity"],
         min: [0, "Quantity can't be negative"],
-        validate: {
-            validators: (value) => {
-                const isInteger = Number.isInteger(value);
-                if(isInteger){
-                    return true
-                }else{
-                    return false
-                }
-            }
-        },
         message: "Quantity must be an integer"
     },
     status: {
@@ -46,7 +36,7 @@ const productSchema = mongoose.Schema({
         required: true,
         enum: {
             values: ["in-stock", "out-of-stock", "discontinued"],
-            message: `Status can't be ${value}`
+            message: "Status can't be {VALUE}"
         }
     },
     // createdAt: {
