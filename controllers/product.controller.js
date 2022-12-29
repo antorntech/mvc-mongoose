@@ -2,9 +2,14 @@ const Product = require('../models/Product.model')
 
 module.exports.allProduct = async (req, res, next) =>{
     try {
+        const reqStatus = req.query.status;
         const result = await Product.find({});
         if(!result){
             return res.status(400).res.send({status: false, error: "Something went wrong"});
+        }
+        if(reqStatus){
+            const result = await Product.find({status: reqStatus})
+            return res.send({status: true, data: result})
         }
         res.status(200).json({
             status: 'success',
