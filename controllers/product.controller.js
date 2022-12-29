@@ -122,3 +122,22 @@ module.exports.deleteProduct = async (req, res, next) => {
         })
     }
 }
+
+module.exports.bulkDeleteProduct = async (req, res, next) => {
+    try {
+        const data = req.body;
+        const result = await Product.deleteMany({_id: data.ids});
+
+        res.status(200).json({
+            status: 'success',
+            message: 'Bulk Data delete successfully!',
+            data: result
+        })
+    } catch (error) {
+        res.status(400).json({
+            status: fail,
+            message: 'Bulk Data not delete',
+            error: error
+        })
+    }
+}
