@@ -6,9 +6,17 @@ module.exports.allProduct = async (req, res, next) =>{
         if(!result){
             return res.status(400).res.send({status: false, error: "Something went wrong"});
         }
-        res.send({status: true,  result})
+        res.status(200).json({
+            status: 'success',
+            message: 'Data find successfully!',
+            data: result
+        })
     } catch (error) {
-        next(error);
+        res.status(400).json({
+            status: 'fail',
+            message: 'Data not find',
+            error: error
+        })
     }
 }
 
@@ -23,14 +31,18 @@ module.exports.createProduct = async (req, res, next) => {
             data: result
         })
     } catch (error) {
-        next(error);
+        res.status(400).json({
+            status: 'fail',
+            message: 'Data is not inserted',
+            error: error
+        })
     }
 }
 
 module.exports.updateProduct = async (req, res, next) => {
     try {
         const { id } = req.params;
-        const result = await Product.updateOne({_id: id}, { $set: req.body })
+        const result = await Product.updateOne({_id: id}, { $set: req.body }, {runValidators: true})
 
         res.status(200).json({
             status: 'success',
@@ -39,9 +51,9 @@ module.exports.updateProduct = async (req, res, next) => {
         })
     } catch (error) {
         res.status(400).json({
-            status: fail,
+            status: 'fail',
             message: 'Data is not updated',
-            error: error.message
+            error: error
         })
     }
 }

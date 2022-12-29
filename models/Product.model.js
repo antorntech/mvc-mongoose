@@ -29,6 +29,16 @@ const productSchema = mongoose.Schema({
         type: Number,
         required: [true, "Please Provide Product Quantity"],
         min: [0, "Quantity can't be negative"],
+        validate: {
+            validator: (value) =>{
+                const isInteger = Number.isInteger(value);
+                if(isInteger){
+                    true
+                } else{
+                    return false
+                }              
+            }
+        },
         message: "Quantity must be an integer"
     },
     status: {
