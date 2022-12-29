@@ -7,5 +7,6 @@ app.post('/', productControllers.createProduct)
 app.patch('/bulk-update', productControllers.bulkUpdateProduct)
 app.patch('/:id', productControllers.updateProduct)
 app.get('/:id', productControllers.detailsProduct)
+app.delete('/:id', productControllers.deleteProduct)
 
 module.exports = app;
