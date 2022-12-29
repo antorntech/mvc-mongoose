@@ -97,7 +97,7 @@ module.exports.detailsProduct = async (req, res, next) => {
         })
     } catch (error) {
         res.status(400).json({
-            status: fail,
+            status: 'fail',
             message: 'Data not find',
             error: error
         })
@@ -116,7 +116,7 @@ module.exports.deleteProduct = async (req, res, next) => {
         })
     } catch (error) {
         res.status(400).json({
-            status: fail,
+            status: 'fail',
             message: 'Data not delete',
             error: error
         })
@@ -128,6 +128,13 @@ module.exports.bulkDeleteProduct = async (req, res, next) => {
         const data = req.body;
         const result = await Product.deleteMany({_id: data.ids});
 
+        if(!result.deletedCount){
+            return res.status(400).json({
+                status: 'fail',
+                message: "Couldn't delete the bulk product",
+            })
+        }
+
         res.status(200).json({
             status: 'success',
             message: 'Bulk Data delete successfully!',
@@ -135,7 +142,7 @@ module.exports.bulkDeleteProduct = async (req, res, next) => {
         })
     } catch (error) {
         res.status(400).json({
-            status: fail,
+            status: 'fail',
             message: 'Bulk Data not delete',
             error: error
         })
