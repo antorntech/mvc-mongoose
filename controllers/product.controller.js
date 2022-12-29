@@ -58,6 +58,25 @@ module.exports.updateProduct = async (req, res, next) => {
     }
 }
 
+module.exports.bulkUpdateProduct = async (req, res, next) => {
+    try {
+        const data = req.body;
+        const result = await Product.updateMany({_id: data.ids}, data.data, {runValidators: true})
+        
+        res.status(200).json({
+            status: 'success',
+            message: 'Data updated successfully!',
+            data: result
+        })
+    } catch (error) {
+        res.status(400).json({
+            status: 'fail',
+            message: 'Data is not updated',
+            error: error
+        })
+    }
+}
+
 module.exports.detailsProduct = async (req, res, next) => {
     try {
         const { id } = req.params;
