@@ -61,8 +61,16 @@ module.exports.updateProduct = async (req, res, next) => {
 module.exports.bulkUpdateProduct = async (req, res, next) => {
     try {
         const data = req.body;
-        const result = await Product.updateMany({_id: data.ids}, data.data, {runValidators: true})
+        // const result = await Product.updateMany({_id: data.ids}, data.data, {runValidators: true})
         
+        const products = [];
+        
+        data.ids.forEach(product => {
+            products.push(Product.updateOne({_id: product.id}, product.data))
+        })
+
+        const result = await Promise.all(products);
+
         res.status(200).json({
             status: 'success',
             message: 'Data updated successfully!',
@@ -91,7 +99,7 @@ module.exports.detailsProduct = async (req, res, next) => {
         res.status(400).json({
             status: fail,
             message: 'Data not find',
-            error: error.message
+            error: error
         })
     }
 }
