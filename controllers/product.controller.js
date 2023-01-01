@@ -16,10 +16,20 @@ module.exports.allProduct = async (req, res, next) =>{
             const result = await Product.find({status: reqStatus})
             return res.send({status: true, data: result})
         }
+
+        // sorting
         if(req.query.sort){
             const sortBy = req.query.sort.split(',').join(' ');
             console.log(sortBy);
             const result = await Product.find({}).sort(sortBy);
+            return res.send({status: true, data: result})
+        }
+
+        // filtering
+        if(req.query.fields){
+            const fieldsBy = req.query.fields.split(',').join(' ');
+            console.log(fieldsBy);
+            const result = await Product.find({}).select(fieldsBy);
             return res.send({status: true, data: result})
         }
         res.status(200).json({
