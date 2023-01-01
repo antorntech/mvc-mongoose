@@ -3,12 +3,23 @@ const Product = require('../models/Product.model')
 module.exports.allProduct = async (req, res, next) =>{
     try {
         const reqStatus = req.query.status;
+        const filters = {...req.query};
+
+        const excludeFields = ['sort', 'page', 'limit'];
+        excludeFields.forEach(field=> delete filters[field]);
+        
         const result = await Product.find({});
         if(!result){
             return res.status(400).res.send({status: false, error: "Something went wrong"});
         }
         if(reqStatus){
             const result = await Product.find({status: reqStatus})
+            return res.send({status: true, data: result})
+        }
+        if(req.query.sort){
+            const sortBy = req.query.sort.split(',').join(' ');
+            console.log(sortBy);
+            const result = await Product.find({}).sort(sortBy);
             return res.send({status: true, data: result})
         }
         res.status(200).json({
