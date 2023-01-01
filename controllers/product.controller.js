@@ -3,12 +3,17 @@ const Product = require('../models/Product.model')
 module.exports.allProduct = async (req, res, next) =>{
     try {
         const reqStatus = req.query.status;
-        const filters = {...req.query};
+        let filters = {...req.query};
+        
+        let filterString = JSON.stringify(filters);
+        filterString = filterString.replace(/\b(gt|gte|lt|lte)\b/g, match=> `$${match}`);
+
+        filters = JSON.parse(filterString);
 
         const excludeFields = ['sort', 'page', 'limit'];
         excludeFields.forEach(field=> delete filters[field]);
         
-        const result = await Product.find({});
+        const result = await Product.find(filters);
         if(!result){
             return res.status(400).res.send({status: false, error: "Something went wrong"});
         }
