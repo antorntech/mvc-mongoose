@@ -44,9 +44,10 @@ module.exports.allProduct = async (req, res, next) =>{
             const skip = (page - 1) * parseInt(limit);
 
             const totalProduct = await Product.countDocuments(filters)
+            const totalPage = Math.ceil(totalProduct/limit); 
 
             const result = await Product.find({}).skip(skip).limit(limit)
-            return res.send({status: true, totalProduct: totalProduct, data: result})
+            return res.send({status: true, totalProduct: totalProduct, totalPage: totalPage, data: result})
         }
 
         res.status(200).json({
