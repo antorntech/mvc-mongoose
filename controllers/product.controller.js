@@ -37,6 +37,18 @@ module.exports.allProduct = async (req, res, next) =>{
             const result = await Product.find({}).select(fieldsBy);
             return res.send({status: true, data: result})
         }
+
+        // pagination
+        if(req.query.page){
+            const {page=1, limit=10} = req.query;
+            const skip = (page - 1) * parseInt(limit);
+
+            const totalProduct = await Product.countDocuments(filters)
+
+            const result = await Product.find({}).skip(skip).limit(limit)
+            return res.send({status: true, totalProduct: totalProduct, data: result})
+        }
+
         res.status(200).json({
             status: 'success',
             message: 'Data find successfully!',
