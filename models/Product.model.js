@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const {ObjectId} = mongoose.Schema.Types;
 
 const productSchema = mongoose.Schema({
     name: {
@@ -6,49 +7,55 @@ const productSchema = mongoose.Schema({
         required: [true, "Please Provide a Product Name"],
         unique: [true, "Product Name Must Be Unique"],
         minLength: [3, "Name At Least 3 Character"],
-        maxLength: [100, "Name is Too Large"]
+        maxLength: [100, "Name is Too Large"],
+        lowercase: true
     },
     description:{
         type: String,
         required: true
     },
-    price:{
-        type: Number,
-        required: true,
-        min: [0, "Price can't be negative"]
-    },
     unit: {
         type: String,
         required: true,
         enum: {
-            values: ["kg", "litre", "pcs"],
-            message: "Unit values must be kg/litre/pcs"
+            values: ["kg", "litre", "pcs", "bag"],
+            message: "Unit values must be kg/litre/pcs/bag"
         }
     },
-    quantity: {
-        type: Number,
-        required: [true, "Please Provide Product Quantity"],
-        min: [0, "Quantity can't be negative"],
-        validate: {
-            validator: (value) =>{
-                const isInteger = Number.isInteger(value);
-                if(isInteger){
-                    true
-                } else{
-                    return false
-                }              
-            }
-        },
-        message: "Quantity must be an integer"
-    },
-    status: {
+    imageURLs: [{
         type: String,
         required: true,
-        enum: {
-            values: ["in-stock", "out-of-stock", "discontinued"],
-            message: "Status can't be {VALUE}"
+        validate: {
+            validator: (value) =>{
+                if(!Array.isArray(value)){
+                    return false;
+                }
+                let isValid = true;
+                value.forEach(url => {
+                    if(!validator.isURL(url)){
+                        isValid = false;
+                    }
+                });
+                return isValid;
+            },
+            message: "Please provide valid image urls"
         }
+    }],
+    category: {
+        type: String,
+        required: true
     },
+    brand: {
+        name: {
+            type: String,
+            required: true
+        },
+        id: {
+            type: ObjectId,
+            ref: "Brand",
+            required: true
+        }
+    }
     // createdAt: {
     //     type: Date,
     //     default: Date.now,
