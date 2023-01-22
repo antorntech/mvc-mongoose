@@ -2,7 +2,7 @@ const Brand = require("../models/Brand.model");
 
 module.exports.allBrand = async (req, res, next) => {
     try {
-        const result = await Brand.find({});
+        const result = await Brand.find({}).select('-products -suppliers');
 
         res.status(200).json({
             status: 'success',
@@ -32,6 +32,24 @@ module.exports.createBrand = async (req, res, next) => {
         res.status(400).json({
             status: 'fail',
             message: 'Data is not inserted',
+            error: error
+        })
+    }
+}
+
+module.exports.singleBrand = async (req, res, next) => {
+    try {
+        const {id} = req.params;
+        const result = await Brand.find({_id: id})
+        res.status(200).json({
+            status: 'success',
+            message: 'Data find successfully!',
+            data: result
+        })
+    } catch (error) {
+        res.status(400).json({
+            status: 'fail',
+            message: 'Data is not find',
             error: error
         })
     }
