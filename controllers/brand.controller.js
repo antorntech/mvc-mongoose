@@ -2,7 +2,7 @@ const Brand = require("../models/Brand.model");
 
 module.exports.allBrand = async (req, res, next) => {
     try {
-        const result = await Brand.find({}).select('-products -suppliers');
+        const result = await Brand.find({});
 
         res.status(200).json({
             status: 'success',
