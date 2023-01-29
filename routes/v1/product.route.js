@@ -4,10 +4,10 @@ const productControllers = require('../../controllers/product.controller');
 const uploader = require('../../middleware/uploader');
 
 
-// app.post("/file-upload", uploader.single("image"), productControllers.fileUpload)
+app.post("/file-upload", uploader.array("image"), productControllers.fileUpload)
 
 app.get('/', productControllers.allProduct)
-app.post('/', uploader.single("image"), productControllers.createProduct)
+app.post('/', uploader.array("image"), productControllers.createProduct)
 app.patch('/bulk-update', productControllers.bulkUpdateProduct)
 app.delete('/bulk-delete', productControllers.bulkDeleteProduct)
 app.patch('/:id', productControllers.updateProduct)

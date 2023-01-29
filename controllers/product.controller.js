@@ -68,9 +68,14 @@ module.exports.createProduct = async (req, res, next) => {
     try {
         const newProduct = req.body;
 
-        if (req.file) {
-            Object.assign(newProduct, { image: '/uploads/image/' + req.file.filename });
+        const files = [];
+
+        req.files.map(file=>files.push('/uploads/image/' + file.filename))
+
+        if (files) {
+            Object.assign(newProduct, { image: files });
         }
+        console.log(files)
 
         const result = await Product.create(newProduct);
 
@@ -204,7 +209,7 @@ module.exports.fileUpload = async (req,res,next) =>{
         res.status(200).json({
             status: 'success',
             message: 'File upload successfully!',
-            data: req.file
+            data: req.files
         })
     } catch (error) {
         res.status(400).json({

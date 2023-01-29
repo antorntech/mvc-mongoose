@@ -22,9 +22,7 @@ const productSchema = mongoose.Schema({
             message: "Unit values must be kg/litre/pcs/bag"
         }
     },
-    image: {
-        type: String,
-    },
+    image: [],
     imageURLs: [{
         type: String,
         validate: {
