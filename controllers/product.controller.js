@@ -67,6 +67,11 @@ module.exports.allProduct = async (req, res, next) =>{
 module.exports.createProduct = async (req, res, next) => {
     try {
         const newProduct = req.body;
+
+        if (req.file) {
+            Object.assign(newProduct, { image: '/uploads/image/' + req.file.filename });
+        }
+
         const result = await Product.create(newProduct);
 
         res.status(200).json({
@@ -188,6 +193,23 @@ module.exports.bulkDeleteProduct = async (req, res, next) => {
         res.status(400).json({
             status: 'fail',
             message: 'Bulk Data not delete',
+            error: error
+        })
+    }
+}
+
+module.exports.fileUpload = async (req,res,next) =>{
+    try {
+        
+        res.status(200).json({
+            status: 'success',
+            message: 'File upload successfully!',
+            data: req.file
+        })
+    } catch (error) {
+        res.status(400).json({
+            status: 'fail',
+            message: 'File upload failed',
             error: error
         })
     }

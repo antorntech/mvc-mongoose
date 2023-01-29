@@ -22,9 +22,11 @@ const productSchema = mongoose.Schema({
             message: "Unit values must be kg/litre/pcs/bag"
         }
     },
+    image: {
+        type: String,
+    },
     imageURLs: [{
         type: String,
-        required: true,
         validate: {
             validator: (value) =>{
                 if(!Array.isArray(value)){
@@ -48,12 +50,10 @@ const productSchema = mongoose.Schema({
     brand: {
         name: {
             type: String,
-            required: true
         },
         id: {
             type: ObjectId,
             ref: "Brand",
-            required: true
         }
     }
 },{
