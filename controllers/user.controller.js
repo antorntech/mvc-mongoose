@@ -1,4 +1,6 @@
 const User = require("../models/User.model");
+const bcrypt = require("bcryptjs");
+const { generateToken } = require("../utils/token");
 
 module.exports.signup = async (req, res, next) => {
     try {
@@ -58,7 +60,30 @@ module.exports.login = async (req, res, next) => {
                 message: "User not found",
             });
         }
+        const isMatch = await bcrypt.compare(password, user.password);
 
+        if (!isMatch) {
+            return res.status(400).json({
+                message: "Incorrect password",
+            });
+        }
+
+        if(user.status !== "active") {
+            return res.status(400).json({
+                message: "User is not active",
+            });
+        }
+        
+        const token = generateToken(user);
+        
+        res.status(200).json({
+            status: 'success',
+            message: 'User logged in successfully!',
+            data: {
+                user,
+                token
+            }
+        })
     } catch (error) {
         res.status(400).json({
             status: 'fail',
